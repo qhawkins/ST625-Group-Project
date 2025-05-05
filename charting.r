@@ -27,19 +27,28 @@ plot_colors <- c(lightblue = "#87CEEB", darkorange = "#FA8072", beige = "#F5DEB3
                  lightpurple = "#D8BFD8", lightgreen = "#90EE90", lightred = "#F08080",
                  orange = "#FFA500", pink="#FFB6C1", mediumblue="#6495ED")
 
+
 #univariate distribution plots
 png(filename = file.path(plot_dir, "univariate_distributions.png"), width = 1920, height = 1080)
-par(mfrow=c(1, 3))
+#par(mfrow=c(1, 3))
+par(mfrow=c(1, 3), cex.main = 2.0, cex.lab = 2.0, cex.axis = 1.3, mar = c(5, 5, 4, 2) + 0.1) # Increased margins slightly too
 
-hist(data$Age, main="Distribution of Player Age", xlab="Size",
+
+
+hist_age <- hist(data$Age, main="Distribution of Player Age", xlab="Age (years)",
      col=plot_colors["lightblue"], breaks=25, probability = TRUE)
 
+
+
 #distribution of weight
-hist(data$Weight, main="Distribution of Player Weight", xlab="Weight (lbs)",
+hist_weight <- hist(data$Weight, main="Distribution of Player Weight", xlab="Weight (lbs)",
      col=plot_colors["lightred"], breaks=25, probability = TRUE)
 
 #distribution of height
-hist(data$Height, main="Distribution of Player Height", xlab="Height (inches)",
+hist_height <- hist(data$Height, main="Distribution of Player Height", xlab="Height (inches)",
      col=plot_colors["lightgreen"], breaks=25, probability = TRUE)
 
 dev.off()
+
+
+

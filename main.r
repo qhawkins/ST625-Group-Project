@@ -13,6 +13,11 @@ print("Throws")
 data$BirthplaceF <- as.factor(data$Birthplace)
 print("BirthplaceF")
 
+#nice color pallette, thanks https://htmlcolorcodes.com/
+plot_colors <- c(lightblue = "#87CEEB", darkorange = "#FA8072", beige = "#F5DEB3",
+                 lightpurple = "#D8BFD8", lightgreen = "#90EE90", lightred = "#F08080",
+                 orange = "#FFA500", pink="#FFB6C1", mediumblue="#6495ED")
+
 col_names <- names(data)
 poly_degree <- 5
 data_subset <- data[c("Height", "Weight", "LgF", "BatsRight", "ThrowsRight", "R.PA")]
@@ -30,6 +35,29 @@ formula_string <- paste(response_var, "~", paste(all_terms, collapse = " + "))
 formula <- as.formula(formula_string)
 
 model <- lm(formula, data = data)
+
+residuals_final <- residuals(model)
+fitted_final <- fitted(model)
+
+png(filename = file.path(plot_dir, "residual_plot_fitted.png"), width = 1920, height = 1080)
+
+original_pars <- par(no.readonly = TRUE)
+par(cex.main = 1.7, cex.lab = 1.5, cex.axis = 1.3, mar = c(5.1, 4.6, 4.1, 2.1))
+
+# Create the plot
+plot(fitted_final, residuals_final,
+     main = paste("Residuals vs Fitted Values"),
+     xlab = "Fitted Values",
+     ylab = "Residuals",
+     pch = 16,                                    
+     cex = 1.8,                                   
+     col = adjustcolor(plot_colors["mediumblue"])
+     )
+
+abline(h = 0, col = "black", lty = 2, lwd = 2)
+
+dev.off()
+
 
 print("Model Summary:")
 print(summary(model))
