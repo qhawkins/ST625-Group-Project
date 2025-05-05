@@ -9,34 +9,33 @@ data$BatsRight <- ifelse(data$Bats == "Right", 1, 0)
 print("Bats")
 data$ThrowsRight <- ifelse(data$Throws == "Right", 1, 0)
 print("Throws")
-
+data$HasAward <- ifelse(data$Awards == "", 0, 1)
+print("HasAward")
+#data$TeamF <- as.factor(data$Team)
+#print("TeamF")
 data$BirthplaceF <- as.factor(data$Birthplace)
 print("BirthplaceF")
 
 col_names <- names(data)
-poly_degree <- 5
-data_subset <- data[c("Height", "Weight", "LgF", "BatsRight", "ThrowsRight", "R.PA")]
-poly_predictors <- c("Height", "Weight")
 
-all_predictor_names <- setdiff(colnames(data_subset), response_var)
-linear_predictors <- setdiff(all_predictor_names, poly_predictors)
+cols_to_exclude_always <- c(response_var, "X", "Lg", "Bats", "Throws", "Awards", "Birthplace", "Pos", "Player", "TB", "Team", "GIDP", "AB")
 
-poly_terms <- paste0("poly(", poly_predictors, ", ", poly_degree, ")")
+potential_predictors <- setdiff(col_names, cols_to_exclude_always)
 
-all_terms <- c(poly_terms, linear_predictors)
+#print(data[potential_predictors])
 
-formula_string <- paste(response_var, "~", paste(all_terms, collapse = " + "))
+print("Potential Predictors")
+formula_string <- paste(response_var, "~",
+  paste(potential_predictors, collapse = " + "))
 
-formula <- as.formula(formula_string)
-
-model <- lm(formula, data = data)
+model <- lm(as.formula(formula_string), data = data)
 
 print("Model Summary:")
 print(summary(model))
 model_summary <- summary(model)
 
 coefficients_csv_path <- "model_coefficients.csv"
-summary_csv_path <- "model_summary_output.csv"
+summary_csv_path <- "model_summary_output.csv" # Will store the captured text summary
 
 coefficients_table <- model_summary$coefficients
 write.csv(coefficients_table, file = coefficients_csv_path, row.names = TRUE)
